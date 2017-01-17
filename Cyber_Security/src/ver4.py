@@ -56,7 +56,7 @@ Y = np.array(y)
 print("Start training...")
 classifiers = []
 for t in range(5):
-    forest = RandomForestClassifier(verbose=1)
+    forest = RandomForestClassifier(verbose = 1, n_estimators = 50, n_jobs = 8)
 #n_estimators = 256, criterion = "gini",
 #                                max_features = "sqrt", n_jobs = 8,
 #                                min_impurity_split = 1e-7,
@@ -99,18 +99,40 @@ for i in range(5):
     results.append(r)
 
 # Weight tuning
-results[0] = results[0] * 0.6
-results[3] = results[3] * 10
+results[0] = results[0] * 0.5
+results[2] = results[2] * 10
+results[3] = (results[3] > 0).astype(int).astype(float)
 
 for r in results:
     r = r.tolist()
 
 result = np.array(results).argmax(axis=0)
 
+zeros = 0
+ones = 0
+twos = 0
+threes = 0
+fours = 0
+
 with open("../output/out44.csv", 'w') as f:
     f.write("id,label\n")
     for i in range(len(result)):
         f.write("{0},{1}\n".format(i+1, result[i]))
+        if result[i] == 0:
+            zeros += 1
+        elif result[i] == 1:
+            ones += 1
+        elif result[i] == 2:
+            twos += 1
+        elif result[i] == 3:
+            threes += 1
+        elif result[i] == 4:
+            fours += 1
 
+print('0\'s: {}'.format(zeros))
+print('1\'s: {}'.format(ones))
+print('2\'s: {}'.format(twos))
+print('3\'s: {}'.format(threes))
+print('4\'s: {}'.format(fours))
 
 
